@@ -1,0 +1,64 @@
+@page "/EditEmployee/{CurrentID}"
+@inject EmployeeService objEmpService
+@inject NavigationManager NavigationManager
+
+<h2>Update Employee</h2>
+<hr />
+<form>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <div class="form-group">
+                    <input for="name" class="form-control" @bind="@objEmp.EmpId" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="Name" class="control-lable">Name</label>
+                <input form="Name" class="form-control" @bind="@objEmp.EmpName">
+            </div>
+            <div class="form-group">
+                <label for="Gender" class="control-lable"></label>
+                <select @bind="@objEmp.Gender" class="control-lable">
+                    <option value="">--Select Gender--</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="Country" class="control-lable">Country</label>
+                <input form="Country" class="form-control" @bind="@objEmp.Country">
+            </div>
+            <div class="form-group">
+                <label for="City" class="control-lable">City</label>
+                <input form="City" class="form-control" @bind="@objEmp.City">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="button" class="btn btn-primary" @onclick="@UpdateEmployee" value="Update" />
+                <input type="button" class="btn btn-danger" @onclick="@Cancel" value="Cancel" />
+            </div>
+        </div>
+    </div>
+</form>
+
+@code {
+    [Parameter]
+    public string CurrentID { get; set; }
+    Models.Employee objEmp = new Models.Employee();
+    protected override async Task OnInitializedAsync()
+    {
+        objEmp = await Task.Run(() => objEmpService.GetEmployeeById(Convert.ToInt32(CurrentID)));
+    }
+    protected void UpdateEmployee()
+    {
+        objEmpService.UpdateEmployee(objEmp);
+        NavigationManager.NavigateTo("Employee");
+    }
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("Employee");
+    }
+}

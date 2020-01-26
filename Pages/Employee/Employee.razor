@@ -1,0 +1,55 @@
+@page "/employee"
+@inject EmployeeService objEmpService
+
+
+<a href="AddnewEmployee">Add New Employee</a>
+<h1>Employee Information</h1>
+@if (objEmp == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Employee Id</th>
+                <th>Name</th>
+                <th>Gender</th>
+                <th>Country</th>
+                <th>City</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var emp in objEmp)
+            {
+                <tr>
+                    <td>@emp.EmpId</td>
+                    <td>@emp.EmpName</td>
+                    <td>@emp.City</td>
+                    <td>@emp.Country</td>
+                    <td>@emp.Gender</td>
+                    <td>
+                        <a class="nav-link" href="EditEmployee/@emp.EmpId">
+                            <span class="oi oi-pencil" aria-hidden="true"></span>Edit
+                        </a>
+                    </td>
+                    <td>
+                        <a class="nav-link" href="DeleteEmployee/@emp.EmpId">
+                            <span class="oi oi-trash" aria-hidden="true"></span>Delete
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+@code{
+    List<Models.Employee> objEmp;
+    protected override async Task OnInitializedAsync()
+    {
+        objEmp = await Task.Run(() => objEmpService.GetEmployee());
+    }
+}
